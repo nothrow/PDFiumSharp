@@ -11,31 +11,32 @@
     <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
     <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <None Include="PDFium.g.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PDFium.tt</DependentUpon>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	<Exec Command="dotnet tool install --global dotnet-t4" ContinueOnError="WarnAndContinue"/>
-    <Exec Command="t4 $(ProjectDir)\PDFium.tt" />
-    <Exec Command="t4 $(ProjectDir)\Types\FPDF_Typedefs.tt" />
+	<Exec Command="dotnet tool install --global dotnet-t4" ContinueOnError="WarnAndContinue" />
+    <Exec Command="t4 $(ProjectDir)\src\PDFium.tt" />
+    <Exec Command="t4 $(ProjectDir)\src\Types\FPDF_Typedefs.tt" />
   </Target>
   
   <ItemGroup>
-    <None Update="Types\FPDF_Typedefs.tt">
+    <None Update="libpdfium_x64.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="libpdfium_x64.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="pdfium_x64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="src\Types\FPDF_Typedefs.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FPDF_Typedefs.g.cs</LastGenOutput>
     </None>
-    <None Update="PDFium.tt">
+    <None Update="src\PDFium.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PDFium.g.cs</LastGenOutput>
     </None>
@@ -50,6 +51,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>PDFium.tt</DependentUpon>
+    </Compile>
+    <Compile Update="src\PDFium.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PDFium.tt</DependentUpon>
+    </Compile>
+    <Compile Update="src\Types\FPDF_Typedefs.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FPDF_Typedefs.tt</DependentUpon>
     </Compile>
     <Compile Update="Types\FPDF_Typedefs.g.cs">
       <DesignTime>True</DesignTime>
