@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	<Exec Command="dotnet tool install --global dotnet-t4" ContinueOnError="WarnAndContinue"/>
     <Exec Command="t4 $(ProjectDir)\PDFium.tt" />
     <Exec Command="t4 $(ProjectDir)\Types\FPDF_Typedefs.tt" />
   </Target>
