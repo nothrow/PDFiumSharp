@@ -50,7 +50,7 @@ namespace PDFiumSharp
 				while (!handle.IsNull)
 				{
 					yield return new PdfBookmark(this, handle);
-					handle = PDFium.FPDFBookmark_GetNextSibling(this.Handle, handle);
+					handle = PDFium.FPDFBookmark_GetNextSibling(Handle, handle);
 				}
 			}
 		}

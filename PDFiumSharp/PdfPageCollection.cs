@@ -24,7 +24,7 @@ namespace PDFiumSharp
 			_pages = new List<PdfPage>(PDFium.FPDF_GetPageCount(doc.Handle));
 
             //Initialize _pages with null entries
-            for(int i=this.Count;i>0;i--)
+            for(int i=Count;i>0;i--)
                 _pages.Add(null);
         }
 
