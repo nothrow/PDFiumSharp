@@ -1,9 +1,8 @@
-﻿using System;
+﻿using PDFiumSharp.Types;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using PDFiumSharp.Types;
 
 namespace PDFiumSharp
 {
@@ -105,9 +104,11 @@ namespace PDFiumSharp
                 {
                     var actualWidthTol = MathF.Max(widthTol, 0.5f * Math.Abs(targetLine.BoundingRectangle.Width - line.BoundingRectangle.Width));
 
-                    if(IsSimilar(sameLeft, line.BoundingRectangle.Left, leftTol) &&
-                        (IsSimilar(targetLine.BoundingRectangle.Width, line.BoundingRectangle.Width, actualWidthTol) || 
-                         DistanceBetween(block.Lines.Last().BoundingRectangle.GetCenter(), line.BoundingRectangle.GetCenter()) < distTol))
+                    var distCenter = DistanceBetween(block.Lines.Last().BoundingRectangle.GetCenter(), line.BoundingRectangle.GetCenter());
+
+                    if (IsSimilar(sameLeft, line.BoundingRectangle.Left, leftTol) &&
+                        ((IsSimilar(targetLine.BoundingRectangle.Width, line.BoundingRectangle.Width, actualWidthTol) && distCenter < distTol*5) ||
+                          distCenter < distTol))
                     {
                         block.AddLine(line);
                     }
@@ -118,11 +119,11 @@ namespace PDFiumSharp
                 blocks.Add(block);
             }
 
-            return SortBlocks(blocks);
+            return SortBlocks(pageWidth, blocks);
         }
 
 
-        private static List<PdfTextBlock> SortBlocks(List<PdfTextBlock> blocks)
+        private static List<PdfTextBlock> SortBlocks(float pageWidth, List<PdfTextBlock> blocks)
         {
             if (!blocks.Any()) return blocks;
             
@@ -130,10 +131,13 @@ namespace PDFiumSharp
             var toProcess    = new HashSet<PdfTextBlock>(blocks);
             sortedBlocks.Add(blocks.First());
             toProcess.Remove(blocks.First());
-            
+
+            var xTol = pageWidth * 0.1f;
+
+
             while (toProcess.Any())
             {
-                var mostLeft = MostLeftBlock(toProcess);
+                var mostLeft = MostLeftBlock(xTol, toProcess);
                 sortedBlocks.Add(mostLeft);
                 toProcess.Remove(mostLeft);
             }
@@ -141,9 +145,12 @@ namespace PDFiumSharp
             return sortedBlocks;
         }
 
-        private static PdfTextBlock MostLeftBlock(IEnumerable<PdfTextBlock> blocks)
+        private static PdfTextBlock MostLeftBlock(float xTol, IEnumerable<PdfTextBlock> blocks)
         {
-            return blocks.OrderBy(b => b.BoundingRectangle.Left).First();
+            return blocks.Select(b => (block: b, left: MathF.Floor(b.BoundingRectangle.Left / xTol) * xTol, top: b.BoundingRectangle.Top))
+                .OrderBy(b => b.left)
+                .ThenBy(b => b.top)
+                .First().block;
         }
 
         public char GetCharacter(int index)
