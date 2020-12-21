@@ -29,7 +29,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: '$(Build.SourcesDirectory)/csharp/RocksDbSharp.csproj'
+    packagesToPack: '$(Build.SourcesDirectory)/PDFiumSharp/PDFiumSharp.csproj'
     configuration: 'Release'
     versioningScheme: 'off'
     buildProperties: 'Version="0.0.$(build.buildId)"'
