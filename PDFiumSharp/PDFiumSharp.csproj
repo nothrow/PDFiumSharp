@@ -32,16 +32,16 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="dotnet tool install --global dotnet-t4" ContinueOnError="WarnAndContinue" />
-    <Exec Command="t4 $(ProjectDir)\src\PDFium.tt" />
-    <Exec Command="t4 $(ProjectDir)\src\Types\FPDF_Typedefs.tt" />
+    <Exec Command="t4 $(ProjectDir)/src/PDFium.tt" />
+    <Exec Command="t4 $(ProjectDir)/src/Types/FPDF_Typedefs.tt" />
   </Target>
   
   <ItemGroup>
-    <None Update="src\Types\FPDF_Typedefs.tt">
+    <None Update="src/Types/FPDF_Typedefs.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FPDF_Typedefs.g.cs</LastGenOutput>
     </None>
-    <None Update="src\PDFium.tt">
+    <None Update="src/PDFium.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PDFium.g.cs</LastGenOutput>
     </None>
@@ -57,17 +57,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PDFium.tt</DependentUpon>
     </Compile>
-    <Compile Update="src\PDFium.g.cs">
+    <Compile Update="src/PDFium.g.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>PDFium.tt</DependentUpon>
     </Compile>
-    <Compile Update="src\Types\FPDF_Typedefs.g.cs">
+    <Compile Update="src/Types/FPDF_Typedefs.g.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FPDF_Typedefs.tt</DependentUpon>
     </Compile>
-    <Compile Update="Types\FPDF_Typedefs.g.cs">
+    <Compile Update="Types/FPDF_Typedefs.g.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FPDF_Typedefs.tt</DependentUpon>
