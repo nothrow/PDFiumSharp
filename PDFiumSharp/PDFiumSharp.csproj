@@ -13,8 +13,8 @@
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
     <PackageId>PDFiumNative</PackageId>
-    <Authors>Curiosity GmbH, Warren Falk</Authors>
-    <Company>Curiosity GmbH, Warren Falk</Company>
+    <Authors>Curiosity GmbH, Tobias Meyer</Authors>
+    <Company>Curiosity GmbH, Tobias Meyer</Company>
     <Description>NET standard bindings for PDFium, including the matching native libraries for Linux, Windows and macOS.</Description>
     <PackageTags>rocksdb leveldb embedded database</PackageTags>
     <Copyright>(c) Copyright © Tobias Meyer 2017, (c) Copyright 2020 Curiosity GmbH</Copyright>
