@@ -15,7 +15,7 @@
     <PackageId>PDFiumNative</PackageId>
     <Authors>Curiosity GmbH, Warren Falk</Authors>
     <Company>Curiosity GmbH, Warren Falk</Company>
-    <Description>NET standard bindings for RocksDB, including the matching native libraries for Linux, Windows and macOS.</Description>
+    <Description>NET standard bindings for PDFium, including the matching native libraries for Linux, Windows and macOS.</Description>
     <PackageTags>rocksdb leveldb embedded database</PackageTags>
     <Copyright>(c) Copyright © Tobias Meyer 2017, (c) Copyright 2020 Curiosity GmbH</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
