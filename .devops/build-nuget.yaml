@@ -30,6 +30,7 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '$(Build.SourcesDirectory)/PDFiumSharp/PDFiumSharp.csproj'
+    workingDirectory: '$(Build.SourcesDirectory)/PDFiumSharp/'
     configuration: 'Release'
     versioningScheme: 'off'
     buildProperties: 'Version="0.0.$(build.buildId)"'
