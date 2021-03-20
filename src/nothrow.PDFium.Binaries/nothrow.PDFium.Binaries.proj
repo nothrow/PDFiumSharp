@@ -1,0 +1,23 @@
+<Project Sdk="$(MSBuildThisFileDirectory)\..\..\sdk\nothrow.FetchBinaries.SDK">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ChromiumVersion Condition=" '$(ChromiumVersion)' == '' ">4446</ChromiumVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FetchBinaries Include="https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$(ChromiumVersion)/pdfium-windows-x64.zip">
+      <ContentFile>x64/bin/pdfium.dll</ContentFile>
+      <TargetFile>runtimes\win\native\pdfium.dll</TargetFile>
+    </FetchBinaries>
+    <FetchBinaries Include="https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$(ChromiumVersion)/pdfium-linux.tgz">
+      <ContentFile>lib/libpdfium.so</ContentFile>
+      <TargetFile>runtimes\linux\native\libpdfium.so</TargetFile>
+    </FetchBinaries>
+    <FetchBinaries Include="https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$(ChromiumVersion)/pdfium-darwin-x64.tgz">
+      <ContentFile>lib/libpdfium.dylib</ContentFile>
+      <TargetFile>runtimes\osx\native\libpdfium.so</TargetFile>
+    </FetchBinaries>
+  </ItemGroup>
+
+</Project>

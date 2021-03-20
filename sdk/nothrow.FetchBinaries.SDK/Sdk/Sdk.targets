@@ -1,0 +1,112 @@
+<Project>
+  
+  <Import Project="Sdk.targets" Sdk="Microsoft.Build.NoTargets" />
+
+  <UsingTask TaskName="DownloadIfNotFound" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Addresses ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <AddressesPath ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+      <Directory ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.Security.Cryptography" />
+      <Using Namespace="System.Net" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+            foreach(var address in Addresses)
+            {
+              var ex = Path.GetExtension(address.ItemSpec);
+              var filename = Path.Combine(Directory, (BitConverter.ToString(new SHA1Managed().ComputeHash(Encoding.UTF8.GetBytes(address.ItemSpec))).Replace("-", "")) + ex);
+              if (!File.Exists(filename))
+              {          
+                new WebClient().DownloadFile(address.ItemSpec, filename);
+                Log.LogMessage(MessageImportance.High, "Downloading " + address.ItemSpec + " into " + filename);
+              }
+              else
+              {
+                Log.LogMessage(MessageImportance.Low, address.ItemSpec + " already found");
+              }
+              address.SetMetadata("Url", address.ItemSpec);
+              address.ItemSpec = filename;
+            }
+            
+            AddressesPath = Addresses;
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+  
+  <UsingTask TaskName="Untar" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" Condition=" '$(PkgSharpZipLib)' != '' ">
+    <ParameterGroup>
+      <SourceFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <DestinationFolder ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="$(PkgSharpZipLib)\lib\netstandard2.0\ICSharpCode.SharpZipLib.dll" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        
+            AppDomain.CurrentDomain.AssemblyResolve += (s, e) => {
+              if (e.Name.StartsWith("ICSharpCode.SharpZipLib")) // hackity hack - the task is run from msbuild context, and does not have all reference paths
+              {
+                  return System.Reflection.Assembly.LoadFile(@"$(PkgSharpZipLib)\lib\netstandard2.0\ICSharpCode.SharpZipLib.dll");
+              }
+              
+              return null;
+            };
+            
+            // this has to be different function, so our resolve may kick in earlier
+            void ProcessMe(Microsoft.Build.Framework.ITaskItem[] sourceFiles, string destinationFolder)
+            {
+        
+                foreach(var sf in sourceFiles)
+                {
+                  try {
+                    using (var fstream = File.Open(sf.ItemSpec, FileMode.Open))
+                    using (var tararchive = ICSharpCode.SharpZipLib.Tar.TarArchive.CreateInputTarArchive(fstream, Encoding.ASCII))
+                      tararchive.ExtractContents(destinationFolder);
+                  }
+                  catch
+                  {
+                    Log.LogError("Cannot unpack " + Path.GetFullPath(sf.ItemSpec));
+                  }
+               }
+            }
+            
+            ProcessMe(SourceFiles, DestinationFolder);
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="FetchBinaries" AfterTargets="Restore" Condition=" '@(FetchBinaries)' != '' ">
+    <MakeDir Directories="$(PackagesPath)" />
+    <DownloadIfNotFound Addresses="@(FetchBinaries)" Directory="$(PackagesPath)" />
+  </Target>
+
+  <Target Name="BeforeBuild" BeforeTargets="Build">
+    
+    <DownloadIfNotFound Addresses="@(FetchBinaries)" Directory="$(PackagesPath)">
+      <Output TaskParameter="AddressesPath" ItemName="LocalFetchedBinaries" />
+    </DownloadIfNotFound>
+    
+    <Unzip SourceFiles="@(LocalFetchedBinaries)" DestinationFolder="$(PackagesPath)\unzipped" Condition="'%(LocalFetchedBinaries.Extension)' == '.zip'" />
+    
+    <!-- for whatever reasons the tgz files in https://github.com/bblanchon/pdfium-binaries/ are not gzipped -->
+    <Untar SourceFiles="@(LocalFetchedBinaries)" DestinationFolder="$(PackagesPath)\unzipped" Condition="'%(LocalFetchedBinaries.Extension)' == '.tgz'" />
+    
+    <ItemGroup>
+      <Content Include="@(LocalFetchedBinaries->'$(PackagesPath)\unzipped\%(ContentFile)')">
+        <Link>%(TargetFile)</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+  </Target>
+
+  <!-- VS support -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\Managed\Microsoft.Managed.DesignTime.targets"
+          Condition="'$(DebuggerFlavor)' == '' And Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\Managed\Microsoft.Managed.DesignTime.targets')" />
+
+</Project>

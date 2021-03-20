@@ -1,0 +1,23 @@
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition=" '$(MicrosoftCommonPropsHasBeenImported)' != 'true' "/>
+  <Import Project="Sdk.props" Sdk="Microsoft.Build.NoTargets" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpZipLib" VersionOverride="1.3.1" GeneratePathProperty="true" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <OutputPath    Condition=" '$(OutputPath)' == '' ">bin\$(Configuration)\</OutputPath>
+    
+    <PackagesPath>obj\$(Configuration)\packages</PackagesPath>
+  </PropertyGroup>
+
+  <!-- VS support -->
+  <Target Name="CompileDesignTime" />
+
+</Project>
