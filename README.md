@@ -9,3 +9,9 @@ This fork is focused on providing support for PDFium on .net core in containeriz
 The easiest way to get going is to reference the NuGet packages. There is single NuGet package available:
 
 - [nothrow.PDFium](https://www.nuget.org/packages/nothrow.PDFium/) - contains Linux, Windows x64 + x86 packages. 
+
+## Development
+
+For building, just `dotnet build` in root is enough.
+
+As you see, there is no solution. You want solution? Run `tools/solution.bat`.

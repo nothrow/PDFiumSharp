@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <OutputType>Exe</OutputType>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Include="..\TestDoc.pdf">
+      <Link>TestDoc.pdf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\nothrow.PDFium\nothrow.PDFium.csproj" />
+  </ItemGroup>
+  
+</Project>

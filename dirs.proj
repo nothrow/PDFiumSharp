@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.Build.Traversal">
+
+  <ItemGroup>
+    <ProjectReference Include="src\nothrow.PDFium\nothrow.PDFium.csproj" />
+    <ProjectReference Include="tools\Samples\Test.Console\Test.Console.csproj" />
+  </ItemGroup>
+
+</Project>

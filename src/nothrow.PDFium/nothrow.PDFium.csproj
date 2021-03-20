@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Platforms>x64</Platforms>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <TransformOnBuild>true</TransformOnBuild>
+    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+    <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
+    <PackageId>PDFiumNative</PackageId>
+    <Authors>Curiosity GmbH, Tobias Meyer</Authors>
+    <Company>Curiosity GmbH, Tobias Meyer</Company>
+    <Description>NET standard bindings for PDFium, including the matching native libraries for Linux, Windows and macOS.</Description>
+    <PackageTags>rocksdb leveldb embedded database</PackageTags>
+    <Copyright>(c) Copyright © Tobias Meyer 2017, (c) Copyright 2020 Curiosity GmbH</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MS-RL</PackageLicenseExpression>
+    <Version>0.0.42</Version>
+    <IncludeReferencedProjects>true</IncludeReferencedProjects>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="dotnet tool install --global dotnet-t4" ContinueOnError="WarnAndContinue" />
+    <Exec Command="t4 $(ProjectDir)/src/PDFium.tt" />
+    <Exec Command="t4 $(ProjectDir)/src/Types/FPDF_Typedefs.tt" />
+  </Target>
+  
+  <ItemGroup>
+    <None Update="src/Types/FPDF_Typedefs.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FPDF_Typedefs.g.cs</LastGenOutput>
+    </None>
+    <None Update="src/PDFium.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PDFium.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="PDFium.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PDFium.tt</DependentUpon>
+    </Compile>
+    <Compile Update="src/PDFium.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PDFium.tt</DependentUpon>
+    </Compile>
+    <Compile Update="src/Types/FPDF_Typedefs.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FPDF_Typedefs.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Types/FPDF_Typedefs.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FPDF_Typedefs.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content CopyToOutputDirectory="PreserveNewest" Include="runtimes/linux-x64/native/libpdfium_x64.so"    Link="libpdfium_x64.so"    Pack="true" PackagePath="runtimes/linux-x64/native/libpdfium_x64.so"/>
+    <Content CopyToOutputDirectory="PreserveNewest" Include="runtimes/osx-x64/native/libpdfium_x64.dylib"   Link="libpdfium_x64.dylib" Pack="true" PackagePath="runtimes/osx-x64/native/libpdfium_x64.dylib"/>
+    <Content CopyToOutputDirectory="PreserveNewest" Include="runtimes/win-x64/native/pdfium_x64.dll"        Link="pdfium_x64.dll"    Pack="true" PackagePath="runtimes/win-x64/native/pdfium_x64.dll"/>
+  </ItemGroup>
+</Project>
