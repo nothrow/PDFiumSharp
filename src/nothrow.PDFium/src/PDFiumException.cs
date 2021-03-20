@@ -1,4 +1,4 @@
-﻿#region Copyright and License
+#region Copyright and License
 /*
 This file is part of PDFiumSharp, a wrapper around the PDFium library for the .NET framework.
 Copyright (C) 2017 Tobias Meyer
@@ -15,6 +15,6 @@ namespace PDFiumSharp
 	public sealed class PDFiumException : Exception
 	{
 		public PDFiumException()
-			: base($"PDFium Error: {PDFium.FPDF_GetLastError().GetDescription()}") { }
+			: base($"PDFium Error: {PDFiumInterop.FPDF_GetLastError().GetDescription()}") { }
 	}
 }

@@ -11,7 +11,7 @@ namespace PDFiumSharp.Types
 		T _handle;
 
 		/// <summary>
-		/// Handle which can be used with the native <see cref="PDFium"/> functions.
+		/// Handle which can be used with the native <see cref="PDFiumInterop"/> functions.
 		/// </summary>
 		public T Handle
 		{

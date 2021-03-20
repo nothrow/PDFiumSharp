@@ -21,7 +21,7 @@ namespace PDFiumSharp
 		internal PdfPageCollection(PdfDocument doc)
 		{
 			_doc = doc;
-			_pages = new List<PdfPage>(PDFium.FPDF_GetPageCount(doc.Handle));
+			_pages = new List<PdfPage>(PDFiumInterop.FPDF_GetPageCount(doc.Handle));
 
             //Initialize _pages with null entries
             for(int i=Count;i>0;i--)
@@ -31,7 +31,7 @@ namespace PDFiumSharp
 		/// <summary>
 		/// Gets the number of pages in the <see cref="PdfDocument"/>.
 		/// </summary>
-		public int Count => PDFium.FPDF_GetPageCount(_doc.Handle);
+		public int Count => PDFiumInterop.FPDF_GetPageCount(_doc.Handle);
 
 		/// <summary>
 		/// Gets the <see cref="PdfPage"/> at the zero-based <paramref name="index"/> in the <see cref="PdfDocument"/>.
@@ -73,13 +73,13 @@ namespace PDFiumSharp
 		/// <summary>
 		/// Imports pages of <paramref name="sourceDocument"/> into the current <see cref="PdfDocument"/>.
 		/// </summary>
-		/// <seealso cref="PDFium.FPDF_ImportPages(Types.FPDF_DOCUMENT, Types.FPDF_DOCUMENT, int, int[])"/>
+		/// <seealso cref="PDFiumInterop.FPDF_ImportPages(Types.FPDF_DOCUMENT, Types.FPDF_DOCUMENT, int, int[])"/>
 		public bool Insert(int index, PdfDocument sourceDocument, params int[] srcPageIndices)
 		{
             bool result = false;
             if (index <= _pages.Count)
             {
-                result = PDFium.FPDF_ImportPages(_doc.Handle, sourceDocument.Handle, index, srcPageIndices);
+                result = PDFiumInterop.FPDF_ImportPages(_doc.Handle, sourceDocument.Handle, index, srcPageIndices);
                 if (result)
                 {
                     _pages.InsertRange(index, Enumerable.Repeat<PdfPage>(null, srcPageIndices.Length));
@@ -99,7 +99,7 @@ namespace PDFiumSharp
 		/// <summary>
 		/// Imports pages of <paramref name="sourceDocument"/> into the current <see cref="PdfDocument"/>.
 		/// </summary>
-		/// <seealso cref="PDFium.FPDF_ImportPages(Types.FPDF_DOCUMENT, Types.FPDF_DOCUMENT, int, int[])"/>
+		/// <seealso cref="PDFiumInterop.FPDF_ImportPages(Types.FPDF_DOCUMENT, Types.FPDF_DOCUMENT, int, int[])"/>
 		public bool Add(PdfDocument sourceDocument, params int[] srcPageIndices)
 		{
 			return Insert(Count, sourceDocument, srcPageIndices);
@@ -150,7 +150,7 @@ namespace PDFiumSharp
 						_pages[i].Index = i;
 				}
 			}
-			PDFium.FPDFPage_Delete(_doc.Handle, index);
+			PDFiumInterop.FPDFPage_Delete(_doc.Handle, index);
 		}
 
 		/// <summary>

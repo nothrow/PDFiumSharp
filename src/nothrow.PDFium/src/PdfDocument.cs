@@ -26,36 +26,36 @@ namespace PDFiumSharp
         /// <summary>
 		/// Gets the PDF file version. File version: 14 for 1.4, 15 for 1.5, ...
 		/// </summary>
-		public int FileVersion { get { PDFium.FPDF_GetFileVersion(Handle, out int fileVersion); return fileVersion; } }
+		public int FileVersion { get { PDFiumInterop.FPDF_GetFileVersion(Handle, out int fileVersion); return fileVersion; } }
 
 		/// <summary>
 		/// Gets the revision of the security handler.
 		/// </summary>
 		/// <seealso href="http://wwwimages.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf">PDF Reference: Table 21</seealso>
-		public int SecurityHandlerRevision => PDFium.FPDF_GetSecurityHandlerRevision(Handle);
+		public int SecurityHandlerRevision => PDFiumInterop.FPDF_GetSecurityHandlerRevision(Handle);
 
-		public DocumentPermissions Permissions => PDFium.FPDF_GetDocPermissions(Handle);
+		public DocumentPermissions Permissions => PDFiumInterop.FPDF_GetDocPermissions(Handle);
 
-		public bool PrintPrefersScaling => PDFium.FPDF_VIEWERREF_GetPrintScaling(Handle);
+		public bool PrintPrefersScaling => PDFiumInterop.FPDF_VIEWERREF_GetPrintScaling(Handle);
 
-		public int PrintCopyCount => PDFium.FPDF_VIEWERREF_GetNumCopies(Handle);
+		public int PrintCopyCount => PDFiumInterop.FPDF_VIEWERREF_GetNumCopies(Handle);
 
-		public DuplexTypes DuplexType => PDFium.FPDF_VIEWERREF_GetDuplex(Handle);
+		public DuplexTypes DuplexType => PDFiumInterop.FPDF_VIEWERREF_GetDuplex(Handle);
 
 		public IEnumerable<PdfBookmark> Bookmarks
 		{
 			get
 			{
-				FPDF_BOOKMARK handle = PDFium.FPDFBookmark_GetFirstChild(Handle, FPDF_BOOKMARK.Null);
+				FPDF_BOOKMARK handle = PDFiumInterop.FPDFBookmark_GetFirstChild(Handle, FPDF_BOOKMARK.Null);
 				while (!handle.IsNull)
 				{
 					yield return new PdfBookmark(this, handle);
-					handle = PDFium.FPDFBookmark_GetNextSibling(Handle, handle);
+					handle = PDFiumInterop.FPDFBookmark_GetNextSibling(Handle, handle);
 				}
 			}
 		}
 
-		public PageModes PageMode => PDFium.FPDFDoc_GetPageMode(Handle);
+		public PageModes PageMode => PDFiumInterop.FPDFDoc_GetPageMode(Handle);
 
 		PdfDocument(FPDF_DOCUMENT doc)
 			: base(doc)
@@ -71,7 +71,7 @@ namespace PDFiumSharp
 		/// <see cref="Close"/> must be called in order to free unmanaged resources.
 		/// </summary>
 		public PdfDocument()
-			: this(PDFium.FPDF_CreateNewDocument()) { }
+			: this(PDFiumInterop.FPDF_CreateNewDocument()) { }
 
 		/// <summary>
 		/// Loads a <see cref="PdfDocument"/> from the file system.
@@ -79,7 +79,7 @@ namespace PDFiumSharp
 		/// </summary>
 		/// <param name="fileName">Filepath of the PDF file to load.</param>
 		public PdfDocument(string fileName, string password = null)
-			: this(PDFium.FPDF_LoadDocument(fileName, password)) { }
+			: this(PDFiumInterop.FPDF_LoadDocument(fileName, password)) { }
 
 		/// <summary>
 		/// Loads a <see cref="PdfDocument"/> from memory.
@@ -89,7 +89,7 @@ namespace PDFiumSharp
 		/// <param name="index">The index of the first byte to be copied from <paramref name="data"/>.</param>
 		/// <param name="count">The number of bytes to copy from <paramref name="data"/> or a negative value to copy all bytes.</param>
 		public PdfDocument(byte[] data, int index = 0, int count = -1, string password = null)
-			: this(PDFium.FPDF_LoadDocument(data, index, count, password)) { }
+			: this(PDFiumInterop.FPDF_LoadDocument(data, index, count, password)) { }
 
         /// <summary>
         /// Loads a <see cref="PdfDocument"/> from '<paramref name="count"/>' bytes read from a <paramref name="stream"/>.
@@ -103,7 +103,7 @@ namespace PDFiumSharp
         /// </param>
         /// <param name="password"></param>
         public PdfDocument(Stream stream, FPDF_FILEREAD fileRead, int count = 0, string password = null)
-            : this(PDFium.FPDF_LoadDocument(stream, fileRead, count, password)) { }
+            : this(PDFiumInterop.FPDF_LoadDocument(stream, fileRead, count, password)) { }
 
 		/// <summary>
 		/// Closes the <see cref="PdfDocument"/> and frees unmanaged resources.
@@ -119,7 +119,7 @@ namespace PDFiumSharp
 		/// </param>
 		public bool Save(Stream stream, SaveFlags flags = SaveFlags.None, int version = 0)
 		{
-			return PDFium.FPDF_SaveAsCopy(Handle, stream, flags, version);
+			return PDFiumInterop.FPDF_SaveAsCopy(Handle, stream, flags, version);
 		}
 
 		/// <summary>
@@ -137,18 +137,18 @@ namespace PDFiumSharp
 
 		public PdfBookmark FindBookmark(string title)
 		{
-			var handle = PDFium.FPDFBookmark_Find(Handle, title);
+			var handle = PDFiumInterop.FPDFBookmark_Find(Handle, title);
 			return handle.IsNull ? null : new PdfBookmark(this, handle);
 		}
 
-		public string GetMetaText(MetadataTags tag) => PDFium.FPDF_GetMetaText(Handle, tag);
+		public string GetMetaText(MetadataTags tag) => PDFiumInterop.FPDF_GetMetaText(Handle, tag);
 
-		public void CopyViewerPreferencesFrom(PdfDocument srcDoc) => PDFium.FPDF_CopyViewerPreferences(Handle, srcDoc.Handle);
+		public void CopyViewerPreferencesFrom(PdfDocument srcDoc) => PDFiumInterop.FPDF_CopyViewerPreferences(Handle, srcDoc.Handle);
 
 		protected override void Dispose(FPDF_DOCUMENT handle)
 		{
 			((IDisposable)Pages).Dispose();
-			PDFium.FPDF_CloseDocument(handle);
+			PDFiumInterop.FPDF_CloseDocument(handle);
 		}
 	}
 }

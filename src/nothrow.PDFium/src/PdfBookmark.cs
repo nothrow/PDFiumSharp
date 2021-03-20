@@ -20,20 +20,20 @@ namespace PDFiumSharp
 		{
 			get
 			{
-				FPDF_BOOKMARK handle = PDFium.FPDFBookmark_GetFirstChild(Document.Handle, Handle);
+				FPDF_BOOKMARK handle = PDFiumInterop.FPDFBookmark_GetFirstChild(Document.Handle, Handle);
 				while (!handle.IsNull)
 				{
 					yield return new PdfBookmark(Document, handle);
-					handle = PDFium.FPDFBookmark_GetNextSibling(Document.Handle, handle);
+					handle = PDFiumInterop.FPDFBookmark_GetNextSibling(Document.Handle, handle);
 				}
 			}
 		}
 
-		public string Title => PDFium.FPDFBookmark_GetTitle(Handle);
+		public string Title => PDFiumInterop.FPDFBookmark_GetTitle(Handle);
 
-		public PdfDestination Destination => new PdfDestination(Document, PDFium.FPDFBookmark_GetDest(Document.Handle, Handle), null);
+		public PdfDestination Destination => new PdfDestination(Document, PDFiumInterop.FPDFBookmark_GetDest(Document.Handle, Handle), null);
 
-		public PdfAction Action => new PdfAction(Document, PDFium.FPDFBookmark_GetAction(Handle));
+		public PdfAction Action => new PdfAction(Document, PDFiumInterop.FPDFBookmark_GetAction(Handle));
 
 		internal PdfBookmark(PdfDocument doc, FPDF_BOOKMARK handle)
 			: base(handle)

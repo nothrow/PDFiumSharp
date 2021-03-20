@@ -1,4 +1,4 @@
-﻿#region Copyright and License
+#region Copyright and License
 /*
 This file is part of PDFiumSharp, a wrapper around the PDFium library for the .NET framework.
 Copyright (C) 2017 Tobias Meyer
@@ -19,10 +19,10 @@ namespace PDFiumSharp
 	/// </summary>
     public sealed class PDFiumBitmap : NativeWrapper<FPDF_BITMAP>
     {
-		public int Width => PDFium.FPDFBitmap_GetWidth(Handle);
-		public int Height => PDFium.FPDFBitmap_GetHeight(Handle);
-		public int Stride => PDFium.FPDFBitmap_GetStride(Handle);
-		public IntPtr Scan0 => PDFium.FPDFBitmap_GetBuffer(Handle);
+		public int Width => PDFiumInterop.FPDFBitmap_GetWidth(Handle);
+		public int Height => PDFiumInterop.FPDFBitmap_GetHeight(Handle);
+		public int Stride => PDFiumInterop.FPDFBitmap_GetStride(Handle);
+		public IntPtr Scan0 => PDFiumInterop.FPDFBitmap_GetBuffer(Handle);
 		public BitmapFormats Format { get; }
 		public int BytesPerPixel => GetBytesPerPixel(Format);
 
@@ -59,7 +59,7 @@ namespace PDFiumSharp
 		/// <see cref="BitmapFormats.FPDFBitmap_BGRA"/> or <see cref="BitmapFormats.FPDFBitmap_BGRx"/>.
 		/// </remarks>
 		public PDFiumBitmap(int width, int height, bool hasAlpha)
-			: this(PDFium.FPDFBitmap_Create(width, height, hasAlpha), hasAlpha ? BitmapFormats.FPDFBitmap_BGRA : BitmapFormats.FPDFBitmap_BGRx) { }
+			: this(PDFiumInterop.FPDFBitmap_Create(width, height, hasAlpha), hasAlpha ? BitmapFormats.FPDFBitmap_BGRA : BitmapFormats.FPDFBitmap_BGRx) { }
 
 		/// <summary>
 		/// Creates a new <see cref="PDFiumBitmap"/> using memory allocated by the caller.
@@ -73,7 +73,7 @@ namespace PDFiumSharp
 		/// <param name="scan0">The adress of the memory block which holds the pixel values.</param>
 		/// <param name="stride">The number of bytes per image row.</param>
 		public PDFiumBitmap(int width, int height, BitmapFormats format, IntPtr scan0, int stride)
-			: this(PDFium.FPDFBitmap_CreateEx(width, height, format, scan0, stride), format) { }
+			: this(PDFiumInterop.FPDFBitmap_CreateEx(width, height, format, scan0, stride), format) { }
 
 		/// <summary>
 		/// Fills a rectangle in the <see cref="PDFiumBitmap"/> with <paramref name="color"/>.
@@ -81,7 +81,7 @@ namespace PDFiumSharp
 		/// </summary>
 		public void FillRectangle(int left, int top, int width, int height, FPDF_COLOR color)
 		{
-			PDFium.FPDFBitmap_FillRect(Handle, left, top, width, height, color);
+			PDFiumInterop.FPDFBitmap_FillRect(Handle, left, top, width, height, color);
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace PDFiumSharp
 
 		protected override void Dispose(FPDF_BITMAP handle)
 		{
-			PDFium.FPDFBitmap_Destroy(handle);
+			PDFiumInterop.FPDFBitmap_Destroy(handle);
 		}
 
 		class BmpStream : Stream

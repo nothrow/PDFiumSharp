@@ -15,7 +15,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\nothrow.PDFium.Binaries\nothrow.PDFium.Binaries.csproj" />
+    <ProjectReference Include="..\nothrow.PDFium.Binaries\nothrow.PDFium.Binaries.proj" />
   </ItemGroup>
 
 </Project>
