@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpZipLib" VersionOverride="1.3.1" GeneratePathProperty="true" />
+    <PackageReference Include="SharpZipLib" VersionOverride="1.3.1" GeneratePathProperty="true">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   
   <PropertyGroup>

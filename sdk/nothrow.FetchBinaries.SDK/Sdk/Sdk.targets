@@ -98,6 +98,8 @@
     <ItemGroup>
       <Content Include="@(LocalFetchedBinaries->'$(PackagesPath)\unzipped\%(ContentFile)')">
         <Link>%(TargetFile)</Link>
+        <Pack>true</Pack>
+        <PackagePath>%(TargetFile)</PackagePath>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>

@@ -11,7 +11,8 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MS-RL</PackageLicenseExpression>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    
+    <IsPackable>true</IsPackable>
+   
   </PropertyGroup>
   
   <ItemGroup>

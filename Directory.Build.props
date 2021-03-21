@@ -1,6 +1,11 @@
 <Project>
 
   <PropertyGroup>
+    <ChromiumVersion>4446</ChromiumVersion>
+    <CSharpPackageVersion>1.0</CSharpPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Curiosity GmbH, Tobias Meyer, Vita Tauer</Authors>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/nothrow/PDFiumSharp</RepositoryUrl>
@@ -10,6 +15,9 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
+
+    <VersionPrefix>$(CSharpPackageVersion).$(ChromiumVersion)</VersionPrefix>
+
   </PropertyGroup>
 
   <ItemGroup>
