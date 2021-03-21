@@ -4,7 +4,7 @@
 
 The PDFiumSharp library is a C#/.NET core wrapper around the <a href="https://pdfium.googlesource.com/pdfium/">PDFium</a> library. It enables .NET developers to create, open, manipulate, render and save PDF documents.
 
-This fork is focused on providing support for PDFium on .net core in containerized environment. Linux version is must-have. Binaries are taken during build from [https://github.com/bblanchon/pdfium-binaries/](https://github.com/bblanchon/pdfium-binaries/).
+This fork of [https://github.com/ArgusMagnus/PDFiumSharp](https://github.com/ArgusMagnus/PDFiumSharp) is focused on providing support for PDFium on .net core in containerized environment. Linux version is must-have. Binaries are taken during build from [https://github.com/bblanchon/pdfium-binaries/](https://github.com/bblanchon/pdfium-binaries/).
 
 
 ## Getting Started
@@ -13,6 +13,12 @@ The easiest way to get going is to reference the NuGet packages. There is single
 
 - [nothrow.PDFium](https://www.nuget.org/packages/nothrow.PDFium/) - contains wrapper, depends on `nothrow.PDFium.Binaries`
 - [nothrow.PDFium.Binaries](https://www.nuget.org/packages/nothrow.PDFium.Binaries/) - contains Linux, Windows, macOS compiled versions of pdfium.
+
+## License
+
+This repository is dual licensed. The wrapper itself, `src/nothrow.PDFium`, is derived from https://github.com/ArgusMagnus/PDFiumSharp, and is under MS-RL license.
+
+Rest of the files, and `sdk`, are MIT.
 
 ## Versioning
 
