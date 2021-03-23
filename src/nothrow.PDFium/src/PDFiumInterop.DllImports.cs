@@ -12,7 +12,7 @@ using PDFiumSharp.Types;
 
 namespace PDFiumSharp
 {
-	public static partial class PDFiumInterop
+	public static partial class PDFium
 	{
         [DllImport("pdfium", CallingConvention = CallingConvention.StdCall, EntryPoint = "FPDF_InitLibrary")]
         public static extern void FPDF_InitLibrary();

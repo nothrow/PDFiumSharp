@@ -15,26 +15,26 @@ namespace PDFiumSharp
             Page = page;
         }
 
-        public static PdfText Load(PdfPage page) => new PdfText(page, PDFiumInterop.FPDFText_LoadPage(page.Handle));
+        public static PdfText Load(PdfPage page) => new PdfText(page, PDFium.FPDFText_LoadPage(page.Handle));
 
         public PdfPage Page { get; }
 
         protected override void Dispose(FPDF_TEXTPAGE handle)
         {
-            PDFiumInterop.FPDFText_ClosePage(handle);
+            PDFium.FPDFText_ClosePage(handle);
         }
 
-        public int CountChars() => PDFiumInterop.FPDFText_CountChars(Handle);
+        public int CountChars() => PDFium.FPDFText_CountChars(Handle);
 
         /// <summary>
         /// Returns all the text on the page.
         /// </summary>
         /// <returns></returns>
-        public string GetText() => PDFiumInterop.FPDFText_GetText(Handle, 0, CountChars());
+        public string GetText() => PDFium.FPDFText_GetText(Handle, 0, CountChars());
 
-        public string GetText(int start_index, int count) => PDFiumInterop.FPDFText_GetText(Handle, start_index, count);
+        public string GetText(int start_index, int count) => PDFium.FPDFText_GetText(Handle, start_index, count);
 
-        public string GetBoundedText(double left, double top, double right, double bottom) => PDFiumInterop.FPDFText_GetBoundedText(Handle, left, top, right, bottom);
+        public string GetBoundedText(double left, double top, double right, double bottom) => PDFium.FPDFText_GetBoundedText(Handle, left, top, right, bottom);
 
         private List<PdfTextInfo> GetBoundedTextInfo(double left, double top, double right, double bottom)
         {
@@ -155,17 +155,17 @@ namespace PDFiumSharp
 
         public char GetCharacter(int index)
         {
-            return PDFiumInterop.FPDFText_GetUnicode(Handle, index);
+            return PDFium.FPDFText_GetUnicode(Handle, index);
         }
 
         public int GetCharIndexAtPos(double x, double y, double xTolerance, double yTolerance)
         {
-            return PDFiumInterop.FPDFText_GetCharIndexAtPos(Handle, x, y, xTolerance, yTolerance);
+            return PDFium.FPDFText_GetCharIndexAtPos(Handle, x, y, xTolerance, yTolerance);
         }
 
         public FS_RECTF GetCharBox(int index)
         {
-            PDFiumInterop.FPDFText_GetCharBox(Handle, index, out var left, out var right, out var bottom, out var top);
+            PDFium.FPDFText_GetCharBox(Handle, index, out var left, out var right, out var bottom, out var top);
             return new FS_RECTF((float)left, (float)top, (float)right, (float)bottom); 
         }
 
@@ -201,7 +201,7 @@ namespace PDFiumSharp
 
         public FS_RECTF GetRect(int rect_index)
         {
-            PDFiumInterop.FPDFText_GetRect(Handle, rect_index, out var left, out var top, out var right, out var bottom);
+            PDFium.FPDFText_GetRect(Handle, rect_index, out var left, out var top, out var right, out var bottom);
             return new FS_RECTF((float)left, (float)top, (float)right, (float)bottom);
         }
 
@@ -219,7 +219,7 @@ namespace PDFiumSharp
         public List<FS_RECTF> GetAllRects()
         {
             var rects = new List<FS_RECTF>();
-            int rectCount = PDFiumInterop.FPDFText_CountRects(Handle, 0, CountChars());
+            int rectCount = PDFium.FPDFText_CountRects(Handle, 0, CountChars());
             for (int i = 0; i < rectCount; i++)
             {
                 rects.Add(GetRect(i));
@@ -229,35 +229,35 @@ namespace PDFiumSharp
 
         public float GetFontSize(int index)
         {
-            return (float)PDFiumInterop.FPDFText_GetFontSize(Handle, index);
+            return (float)PDFium.FPDFText_GetFontSize(Handle, index);
         }
 
         public int FindText(string searchText, SearchFlags searchFlags, int start_index = 0)
         {
-            var hSearch = PDFiumInterop.FPDFText_FindStart(Handle, searchText, searchFlags, start_index);
+            var hSearch = PDFium.FPDFText_FindStart(Handle, searchText, searchFlags, start_index);
             try
             {
-                int countCharsFound = PDFiumInterop.FPDFText_GetSchCount(hSearch);
-                int charIndex = PDFiumInterop.FPDFText_GetSchResultIndex(hSearch);
+                int countCharsFound = PDFium.FPDFText_GetSchCount(hSearch);
+                int charIndex = PDFium.FPDFText_GetSchResultIndex(hSearch);
                 return charIndex;
             }
             finally
             {
-                PDFiumInterop.FPDFText_FindClose(hSearch);
+                PDFium.FPDFText_FindClose(hSearch);
             }
         }
 
         public List<PdfTextInfo> FindTextAll(string searchText, SearchFlags searchFlags, int start_index = 0)
         {
             var results = new List<PdfTextInfo>();
-            var hSearch = PDFiumInterop.FPDFText_FindStart(Handle, searchText, searchFlags, start_index);
+            var hSearch = PDFium.FPDFText_FindStart(Handle, searchText, searchFlags, start_index);
             
             try
             {
-                while (PDFiumInterop.FPDFText_FindNext(hSearch))
+                while (PDFium.FPDFText_FindNext(hSearch))
                 {
-                    int countCharsFound = PDFiumInterop.FPDFText_GetSchCount(hSearch);
-                    int charIndex = PDFiumInterop.FPDFText_GetSchResultIndex(hSearch);
+                    int countCharsFound = PDFium.FPDFText_GetSchCount(hSearch);
+                    int charIndex = PDFium.FPDFText_GetSchResultIndex(hSearch);
 
                     var boundingRect = GetRect(charIndex, countCharsFound, out var charBoxes);
 
@@ -266,7 +266,7 @@ namespace PDFiumSharp
             }
             finally
             {
-                PDFiumInterop.FPDFText_FindClose(hSearch);
+                PDFium.FPDFText_FindClose(hSearch);
             }
             return results;
         }

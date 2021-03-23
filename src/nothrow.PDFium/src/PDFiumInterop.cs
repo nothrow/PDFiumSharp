@@ -20,7 +20,7 @@ namespace PDFiumSharp
 	/// Static class containing the native (imported) PDFium functions.
 	/// In case of missing documentation, refer to the <see href="https://pdfium.googlesource.com/pdfium/+/master/public">PDFium header files</see>. 
 	/// </summary>
-	public static partial class PDFiumInterop
+	public static partial class PDFium
     {
 		/// <summary>
 		/// Gets a value indicating whether the PDFium library is available.
@@ -29,14 +29,14 @@ namespace PDFiumSharp
 		/// </summary>
 		public static bool IsAvailable { get; }
 
-		static PDFiumInterop()
+		static PDFium()
 		{
 			IsAvailable = Initialize();
 		}
 
 		static bool Initialize()
 		{
-			try { PDFiumInterop.FPDF_InitLibrary(); }
+			try { PDFium.FPDF_InitLibrary(); }
 			catch { return false; }
 			return true;
 		}
@@ -334,8 +334,8 @@ namespace PDFiumSharp
 		/// The new PDF file version of the saved file.
 		/// 14 for 1.4, 15 for 1.5, etc. Values smaller than 10 are ignored.
 		/// </param>
-		/// <seealso cref="PDFiumInterop.FPDF_SaveAsCopy(FPDF_DOCUMENT, FPDF_FILEWRITE, SaveFlags)"/>
-		/// <seealso cref="PDFiumInterop.FPDF_SaveWithVersion(FPDF_DOCUMENT, FPDF_FILEWRITE, SaveFlags, int)"/>
+		/// <seealso cref="PDFium.FPDF_SaveAsCopy(FPDF_DOCUMENT, FPDF_FILEWRITE, SaveFlags)"/>
+		/// <seealso cref="PDFium.FPDF_SaveWithVersion(FPDF_DOCUMENT, FPDF_FILEWRITE, SaveFlags, int)"/>
 		public static bool FPDF_SaveAsCopy(FPDF_DOCUMENT document, Stream stream, SaveFlags flags, int version = 0)
 		{
 			byte[] buffer = null;

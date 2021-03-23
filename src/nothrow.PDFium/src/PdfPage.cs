@@ -19,13 +19,13 @@ namespace PDFiumSharp
 		/// Gets the page width (excluding non-displayable area) measured in points.
 		/// One point is 1/72 inch(around 0.3528 mm).
 		/// </summary>
-		public double Width => PDFiumInterop.FPDF_GetPageWidth(Handle);
+		public double Width => PDFium.FPDF_GetPageWidth(Handle);
 
 		/// <summary>
 		/// Gets the page height (excluding non-displayable area) measured in points.
 		/// One point is 1/72 inch(around 0.3528 mm).
 		/// </summary>
-		public double Height => PDFiumInterop.FPDF_GetPageHeight(Handle);
+		public double Height => PDFium.FPDF_GetPageHeight(Handle);
 
 		/// <summary>
 		/// Gets the page width and height (excluding non-displayable area) measured in points.
@@ -35,7 +35,7 @@ namespace PDFiumSharp
 		{
 			get
 			{
-				if (PDFiumInterop.FPDF_GetPageSizeByIndex(Document.Handle, Index, out var width, out var height))
+				if (PDFium.FPDF_GetPageSizeByIndex(Document.Handle, Index, out var width, out var height))
 					return (width, height);
 				throw new PDFiumException();
 			}
@@ -46,14 +46,14 @@ namespace PDFiumSharp
 		/// </summary>
 		public PageOrientations Orientation
 		{
-			get => PDFiumInterop.FPDFPage_GetRotation(Handle);
-			set => PDFiumInterop.FPDFPage_SetRotation(Handle, value);
+			get => PDFium.FPDFPage_GetRotation(Handle);
+			set => PDFium.FPDFPage_SetRotation(Handle, value);
 		}
 
         /// <summary>
         /// Get the transparency of the page
         /// </summary>
-        public bool HasTransparency => PDFiumInterop.FPDFPage_HasTransparency(Handle);
+        public bool HasTransparency => PDFium.FPDFPage_HasTransparency(Handle);
 
         /// <summary>
         /// Gets the zero-based index of the page in the <see cref="Document"/>
@@ -76,8 +76,8 @@ namespace PDFiumSharp
 			Index = index;
 		}
 
-		internal static PdfPage Load(PdfDocument doc, int index) => new PdfPage(doc, PDFiumInterop.FPDF_LoadPage(doc.Handle, index), index);
-		internal static PdfPage New(PdfDocument doc, int index, double width, double height) => new PdfPage(doc, PDFiumInterop.FPDFPage_New(doc.Handle, index, width, height), index);
+		internal static PdfPage Load(PdfDocument doc, int index) => new PdfPage(doc, PDFium.FPDF_LoadPage(doc.Handle, index), index);
+		internal static PdfPage New(PdfDocument doc, int index, double width, double height) => new PdfPage(doc, PDFium.FPDFPage_New(doc.Handle, index, width, height), index);
 
 		/// <summary>
 		/// Renders the page to a <see cref="PDFiumBitmap"/>
@@ -91,7 +91,7 @@ namespace PDFiumSharp
 			if (renderTarget == null)
 				throw new ArgumentNullException(nameof(renderTarget));
 
-			PDFiumInterop.FPDF_RenderPageBitmap(renderTarget.Handle, Handle, rectDest.left, rectDest.top, rectDest.width, rectDest.height, orientation, flags);
+			PDFium.FPDF_RenderPageBitmap(renderTarget.Handle, Handle, rectDest.left, rectDest.top, rectDest.width, rectDest.height, orientation, flags);
 		}
 
 		/// <summary>
@@ -108,24 +108,24 @@ namespace PDFiumSharp
 		public (double X, double Y) DeviceToPage((int left, int top, int width, int height) displayArea, int deviceX, int deviceY, PageOrientations orientation = PageOrientations.Normal)
 		{
 			(var left, var top, var width, var height) = displayArea;
-			PDFiumInterop.FPDF_DeviceToPage(Handle, left, top, width, height, orientation, deviceX, deviceY, out var x, out var y);
+			PDFium.FPDF_DeviceToPage(Handle, left, top, width, height, orientation, deviceX, deviceY, out var x, out var y);
 			return (x, y);
 		}
 
 		public (int X, int Y) PageToDevice((int left, int top, int width, int height) displayArea, double pageX, double pageY, PageOrientations orientation = PageOrientations.Normal)
 		{
 			(var left, var top, var width, var height) = displayArea;
-			PDFiumInterop.FPDF_PageToDevice(Handle, left, top, width, height, orientation, pageX, pageY, out var x, out var y);
+			PDFium.FPDF_PageToDevice(Handle, left, top, width, height, orientation, pageX, pageY, out var x, out var y);
 			return (x, y);
 		}
 
-		public FlattenResults Flatten(FlattenFlags flags) => PDFiumInterop.FPDFPage_Flatten(Handle, flags);
+		public FlattenResults Flatten(FlattenFlags flags) => PDFium.FPDFPage_Flatten(Handle, flags);
 
         public void Dispose() => ((IDisposable)this).Dispose();
 
         protected override void Dispose(FPDF_PAGE handle)
 		{
-			PDFiumInterop.FPDF_ClosePage(handle);
+			PDFium.FPDF_ClosePage(handle);
 		}
 	}
 }

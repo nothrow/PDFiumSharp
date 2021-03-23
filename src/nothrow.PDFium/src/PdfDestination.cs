@@ -17,13 +17,13 @@ namespace PDFiumSharp
 		public PdfDocument Document { get; }
 		public string Name { get; }
 
-		public int PageIndex => PDFiumInterop.FPDFDest_GetPageIndex(Document.Handle, Handle);
+		public int PageIndex => PDFium.FPDFDest_GetPageIndex(Document.Handle, Handle);
 
 		public (float X, float Y, float Zoom) LocationInPage
 		{
 			get
 			{
-				if (!PDFiumInterop.FPDFDest_GetLocationInPage(Handle, out bool hasX, out bool hasY, out bool hasZ, out float x, out float y, out float z))
+				if (!PDFium.FPDFDest_GetLocationInPage(Handle, out bool hasX, out bool hasY, out bool hasZ, out float x, out float y, out float z))
 					return ((hasX ? x : float.NaN), (hasY ? y : float.NaN), (hasZ ? z : float.NaN));
 				return (float.NaN, float.NaN, float.NaN);
 			}

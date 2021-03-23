@@ -16,13 +16,13 @@ namespace PDFiumSharp
     {
 		public PdfDocument Document { get; }
 
-		public ActionTypes Type => PDFiumInterop.FPDFAction_GetType(Handle);
+		public ActionTypes Type => PDFium.FPDFAction_GetType(Handle);
 
-		public PdfDestination Destination => new PdfDestination(Document, PDFiumInterop.FPDFAction_GetDest(Document.Handle, Handle), null);
+		public PdfDestination Destination => new PdfDestination(Document, PDFium.FPDFAction_GetDest(Document.Handle, Handle), null);
 
-		public string FilePath => PDFiumInterop.FPDFAction_GetFilePath(Handle);
+		public string FilePath => PDFium.FPDFAction_GetFilePath(Handle);
 
-		public Uri Uri => new Uri(PDFiumInterop.FPDFAction_GetURIPath(Document.Handle, Handle));
+		public Uri Uri => new Uri(PDFium.FPDFAction_GetURIPath(Document.Handle, Handle));
 
 		internal PdfAction(PdfDocument doc, FPDF_ACTION actionHandle)
 			:base(actionHandle)
