@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ChromiumVersion>4446</ChromiumVersion>
+    <ChromiumVersion>4455</ChromiumVersion>
     <CSharpPackageVersion>1.0</CSharpPackageVersion>
   </PropertyGroup>
 
