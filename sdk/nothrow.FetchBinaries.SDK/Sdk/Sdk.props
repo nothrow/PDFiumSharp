@@ -16,7 +16,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <OutputPath    Condition=" '$(OutputPath)' == '' ">bin\$(Configuration)\</OutputPath>
     
-    <PackagesPath>obj\$(Configuration)\packages</PackagesPath>
+    <PackagesPath>obj\packages</PackagesPath>
   </PropertyGroup>
 
   <!-- VS support -->
