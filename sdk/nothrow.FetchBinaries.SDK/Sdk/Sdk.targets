@@ -15,19 +15,26 @@
         <![CDATA[
             foreach(var address in Addresses)
             {
-              var ex = Path.GetExtension(address.ItemSpec);
-              var filename = Path.Combine(Directory, (BitConverter.ToString(new SHA1Managed().ComputeHash(Encoding.UTF8.GetBytes(address.ItemSpec))).Replace("-", "")) + ex);
-              if (!File.Exists(filename))
-              {          
-                new WebClient().DownloadFile(address.ItemSpec, filename);
-                Log.LogMessage(MessageImportance.High, "Downloading " + address.ItemSpec + " into " + filename);
+              try {
+                var ex = Path.GetExtension(address.ItemSpec);
+                var filename = Path.Combine(Directory, (BitConverter.ToString(new SHA1Managed().ComputeHash(Encoding.UTF8.GetBytes(address.ItemSpec))).Replace("-", "")) + ex);
+                if (!File.Exists(filename))
+                {          
+                  new WebClient().DownloadFile(address.ItemSpec, filename);
+                  Log.LogMessage(MessageImportance.High, "Downloading " + address.ItemSpec + " into " + filename);
+                }
+                else
+                {
+                  Log.LogMessage(MessageImportance.Low, address.ItemSpec + " already found");
+                }
+                address.SetMetadata("Url", address.ItemSpec);
+                address.ItemSpec = filename;
               }
-              else
+              catch (Exception ex)
               {
-                Log.LogMessage(MessageImportance.Low, address.ItemSpec + " already found");
+                Log.LogError("Download of " + address.ItemSpec + " failed: " + ex.Message);
+                return false;
               }
-              address.SetMetadata("Url", address.ItemSpec);
-              address.ItemSpec = filename;
             }
             
             AddressesPath = Addresses;

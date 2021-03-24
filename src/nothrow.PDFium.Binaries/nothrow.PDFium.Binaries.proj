@@ -11,7 +11,11 @@
   <ItemGroup>
     <FetchBinaries Include="https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$(ChromiumVersion)/pdfium-windows-x64.zip">
       <ContentFile>x64/bin/pdfium.dll</ContentFile>
-      <TargetFile>runtimes\win\native\pdfium.dll</TargetFile>
+      <TargetFile>runtimes\win-x64\native\pdfium.dll</TargetFile>
+    </FetchBinaries>
+    <FetchBinaries Include="https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$(ChromiumVersion)/pdfium-windows-x86.zip">
+      <ContentFile>x86/bin/pdfium.dll</ContentFile>
+      <TargetFile>runtimes\win-x86\native\pdfium.dll</TargetFile>
     </FetchBinaries>
     <FetchBinaries Include="https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$(ChromiumVersion)/pdfium-linux.tgz">
       <ContentFile>lib/libpdfium.so</ContentFile>
