@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <ChromiumVersion>4455</ChromiumVersion>
-    <CSharpPackageVersion>1.2</CSharpPackageVersion>
+    <CSharpPackageVersion>1.3</CSharpPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
